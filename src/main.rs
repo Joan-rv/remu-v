@@ -1,4 +1,4 @@
-use remu_v::{decode, memory::Memory};
+use remu_v::{decode, memory::Memory, state::State};
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -10,8 +10,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut memory = Memory::new();
     memory.load_file(path, 0)?;
 
-    println!("{:?}", decode::decode(memory.lw(0))?);
-    Ok(())
+    let mut state = State::default();
+
+    loop {
+        let instruction = memory.lw(state.pc);
+        state.pc += 4;
+        println!("{:?}", decode::decode(instruction)?);
+    }
 }
 
 #[derive(Debug)]
