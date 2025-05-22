@@ -6,5 +6,8 @@ pub fn execute(instruction: Instruction, state: &mut State) {
         Instruction::Add { rd, rs1, rs2 } => {
             state.regs[rd as usize] = state.regs[rs1 as usize] + state.regs[rs2 as usize]
         }
+        Instruction::Addi { rd, rs1, imm } => {
+            state.regs[rd as usize] = state.regs[rs1 as usize] + imm as u32;
+        }
     }
 }

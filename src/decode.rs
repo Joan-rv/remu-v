@@ -6,6 +6,7 @@ pub fn decode(word: u32) -> Result<Instruction, DecodeError> {
 
     match opcode {
         0b0110011 => decode_op(word),
+        0b0010011 => decode_op_imm(word),
         _ => Err(DecodeError),
     }
 }
@@ -26,6 +27,23 @@ fn decode_op(word: u32) -> Result<Instruction, DecodeError> {
 
     match funct {
         0b0000000000 => Ok(Instruction::Add { rd, rs1, rs2 }),
+        _ => Err(DecodeError),
+    }
+}
+
+fn decode_op_imm(word: u32) -> Result<Instruction, DecodeError> {
+    // instruction[14:12]
+    let funct3 = (word >> 12) & 0x7;
+
+    // instruction[11:7]
+    let rd = (word >> 7) as u8 & 0x1f;
+    // instruction[19:15]
+    let rs1 = (word >> 15) as u8 & 0x1f;
+    // instruction[31:20]
+    let imm = (word >> 20) as u16 & 0xfff;
+
+    match funct3 {
+        0b000 => Ok(Instruction::Addi { rd, rs1, imm }),
         _ => Err(DecodeError),
     }
 }
