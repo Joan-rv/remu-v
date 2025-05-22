@@ -4,10 +4,12 @@ use crate::state::State;
 pub fn execute(instruction: Instruction, state: &mut State) {
     match instruction {
         Instruction::Add { rd, rs1, rs2 } => {
-            state.regs[rd as usize] = state.regs[rs1 as usize] + state.regs[rs2 as usize]
+            let v = state.get(rs1) + state.get(rs2);
+            state.set(rd, v);
         }
         Instruction::Addi { rd, rs1, imm } => {
-            state.regs[rd as usize] = state.regs[rs1 as usize] + imm as u32;
+            let v = state.get(rs1) + imm as u32;
+            state.set(rd, v);
         }
     }
 }
