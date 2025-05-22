@@ -1,4 +1,4 @@
-use remu_v::{decode, memory::Memory, state::State};
+use remu_v::{decode, execute, memory::Memory, state::State};
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -13,10 +13,19 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut state = State::default();
 
     loop {
-        let instruction = memory.lw(state.pc);
+        let word = memory.lw(state.pc);
         state.pc += 4;
-        println!("{:?}", decode::decode(instruction)?);
+        let instruction = match decode(word) {
+            Ok(i) => i,
+            Err(e) => {
+                println!("Failed decoding: {}", e);
+                break;
+            }
+        };
+        execute(instruction, &mut state);
     }
+    println!("End state: {:?}", state);
+    Ok(())
 }
 
 #[derive(Debug)]
