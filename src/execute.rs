@@ -16,5 +16,30 @@ pub fn execute(instruction: Instruction, state: &mut State) {
                 state.pc = state.pc.wrapping_add_signed(imm as i32 - 4);
             }
         }
+        Instruction::Bne { imm, rs1, rs2 } => {
+            if state.get(rs1) != state.get(rs2) {
+                state.pc = state.pc.wrapping_add_signed(imm as i32 - 4);
+            }
+        }
+        Instruction::Blt { imm, rs1, rs2 } => {
+            if state.gets(rs1) < state.gets(rs2) {
+                state.pc = state.pc.wrapping_add_signed(imm as i32 - 4);
+            }
+        }
+        Instruction::Bge { imm, rs1, rs2 } => {
+            if state.gets(rs1) >= state.gets(rs2) {
+                state.pc = state.pc.wrapping_add_signed(imm as i32 - 4);
+            }
+        }
+        Instruction::Bltu { imm, rs1, rs2 } => {
+            if state.get(rs1) < state.get(rs2) {
+                state.pc = state.pc.wrapping_add_signed(imm as i32 - 4);
+            }
+        }
+        Instruction::Bgeu { imm, rs1, rs2 } => {
+            if state.get(rs1) >= state.get(rs2) {
+                state.pc = state.pc.wrapping_add_signed(imm as i32 - 4);
+            }
+        }
     }
 }

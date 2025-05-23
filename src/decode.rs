@@ -76,6 +76,11 @@ fn decode_branch(word: u32) -> Result<Instruction, DecodeError> {
 
     match funct3 {
         0b000 => Ok(Instruction::Beq { imm, rs1, rs2 }),
+        0b001 => Ok(Instruction::Bne { imm, rs1, rs2 }),
+        0b100 => Ok(Instruction::Blt { imm, rs1, rs2 }),
+        0b101 => Ok(Instruction::Bge { imm, rs1, rs2 }),
+        0b110 => Ok(Instruction::Bltu { imm, rs1, rs2 }),
+        0b111 => Ok(Instruction::Bgeu { imm, rs1, rs2 }),
         _ => Err(DecodeError),
     }
 }

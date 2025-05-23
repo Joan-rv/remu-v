@@ -3,4 +3,4 @@
 loop:
     addi t0, t0, 1
     add t0, t0, t0
-    beq x0, x0, loop
+    blt x0, t0, loop

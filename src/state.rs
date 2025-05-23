@@ -8,6 +8,9 @@ impl State {
     pub fn get(&mut self, r: u8) -> u32 {
         self.regs[r as usize]
     }
+    pub fn gets(&mut self, r: u8) -> i32 {
+        self.get(r) as i32
+    }
     pub fn set(&mut self, r: u8, v: u32) {
         if r > 0 {
             self.regs[r as usize] = v;
