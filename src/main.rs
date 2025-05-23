@@ -7,7 +7,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         return Err(Box::new(ArgError));
     };
 
-    let mut memory = Memory::new();
+    let mut memory = Memory::new(1024);
     memory.load_file(path, 0)?;
 
     let mut state = State::default();

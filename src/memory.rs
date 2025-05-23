@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::vec::Vec;
 use std::{
     fs::File,
     io::{BufReader, prelude::*},
@@ -7,39 +7,31 @@ use std::{
 
 #[derive(Debug, Clone)]
 pub struct Memory {
-    data: HashMap<u32, u8>,
+    data: Vec<u8>,
 }
 
 impl Memory {
-    pub fn new() -> Self {
+    pub fn new(size: usize) -> Self {
         Self {
-            data: HashMap::new(),
+            data: vec![0; size],
         }
     }
 
-    pub fn load_file(&mut self, path: impl AsRef<Path>, offset: u32) -> Result<(), std::io::Error> {
+    pub fn load_file(
+        &mut self,
+        path: impl AsRef<Path>,
+        offset: usize,
+    ) -> Result<(), std::io::Error> {
         let program = BufReader::new(File::open(path)?);
         for (idx, byte) in program.bytes().enumerate() {
-            self.data.insert(offset + idx as u32, byte?);
+            self.data[offset + idx] = byte?;
         }
         Ok(())
     }
 
     pub fn lw(&self, addr: u32) -> u32 {
-        u32::from_le_bytes(
-            [
-                self.data.get(&addr),
-                self.data.get(&(addr + 1)),
-                self.data.get(&(addr + 2)),
-                self.data.get(&(addr + 3)),
-            ]
-            .map(|x| *x.unwrap_or(&0)),
-        )
-    }
-}
-
-impl Default for Memory {
-    fn default() -> Self {
-        Self::new()
+        let addr = addr as usize;
+        debug_assert!(self.data.len() >= addr + 4);
+        u32::from_le_bytes(self.data[addr..(addr + 4)].try_into().unwrap())
     }
 }
