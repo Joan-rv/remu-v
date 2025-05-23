@@ -1,5 +1,6 @@
 use remu_v::{decode, execute, memory::Memory, state::State};
 use std::error::Error;
+use thiserror::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let Some(path) = std::env::args().nth(1) else {
@@ -28,11 +29,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-#[derive(Debug)]
+#[derive(Error, Debug)]
+#[error("Missing arguments")]
 struct ArgError;
-impl std::fmt::Display for ArgError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Missing arguments")
-    }
-}
-impl Error for ArgError {}

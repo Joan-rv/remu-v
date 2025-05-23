@@ -1,4 +1,5 @@
 use crate::instruction::Instruction;
+use thiserror::Error;
 
 pub fn decode(word: u32) -> Result<Instruction, DecodeError> {
     // instruction[6:0]
@@ -79,11 +80,6 @@ fn decode_branch(word: u32) -> Result<Instruction, DecodeError> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Error, Debug)]
+#[error("Illigal instruction")]
 pub struct DecodeError;
-impl std::fmt::Display for DecodeError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Illigal instruction")
-    }
-}
-impl std::error::Error for DecodeError {}
