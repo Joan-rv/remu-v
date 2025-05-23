@@ -9,6 +9,7 @@ pub fn decode(word: u32) -> Result<Instruction, DecodeError> {
         0b0110011 => decode_op(word),
         0b0010011 => decode_op_imm(word),
         0b1100011 => decode_branch(word),
+        0b0000011 => decode_load(word),
         _ => Err(DecodeError),
     }
 }
@@ -81,6 +82,28 @@ fn decode_branch(word: u32) -> Result<Instruction, DecodeError> {
         0b101 => Ok(Instruction::Bge { imm, rs1, rs2 }),
         0b110 => Ok(Instruction::Bltu { imm, rs1, rs2 }),
         0b111 => Ok(Instruction::Bgeu { imm, rs1, rs2 }),
+        _ => Err(DecodeError),
+    }
+}
+
+fn decode_load(word: u32) -> Result<Instruction, DecodeError> {
+    // instruction[14:12]
+    let funct3 = (word >> 12) & 0x7;
+
+    // instruction[11:7]
+    let rd = (word >> 7) as u8 & 0x1f;
+    // instruction[19:15]
+    let rs1 = (word >> 15) as u8 & 0x1f;
+    // instruction[31:20]
+    let imm = (word >> 20) as i16 & 0xfff;
+    let imm = (imm << 4) >> 4;
+
+    match funct3 {
+        0b000 => Ok(Instruction::Lb { rd, rs1, imm }),
+        0b001 => Ok(Instruction::Lh { rd, rs1, imm }),
+        0b010 => Ok(Instruction::Lw { rd, rs1, imm }),
+        0b100 => Ok(Instruction::Lbu { rd, rs1, imm }),
+        0b101 => Ok(Instruction::Lhu { rd, rs1, imm }),
         _ => Err(DecodeError),
     }
 }

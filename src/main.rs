@@ -23,9 +23,9 @@ fn main() -> Result<(), Box<dyn Error>> {
                 break;
             }
         };
-        execute(instruction, &mut state);
+        execute(instruction, &mut state, &mut memory);
     }
-    println!("End state: {:?}", state);
+    println!("End state: {:#x?}", state);
     Ok(())
 }
 
