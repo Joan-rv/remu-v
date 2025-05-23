@@ -43,7 +43,7 @@ fn decode_op_imm(word: u32) -> Result<Instruction, DecodeError> {
     // instruction[19:15]
     let rs1 = (word >> 15) as u8 & 0x1f;
     // instruction[31:20]
-    let imm = (word >> 20) as u16 & 0xfff;
+    let imm = (word >> 20) as i16;
 
     match funct3 {
         0b000 => Ok(Instruction::Addi { rd, rs1, imm }),
@@ -95,8 +95,7 @@ fn decode_load(word: u32) -> Result<Instruction, DecodeError> {
     // instruction[19:15]
     let rs1 = (word >> 15) as u8 & 0x1f;
     // instruction[31:20]
-    let imm = (word >> 20) as i16 & 0xfff;
-    let imm = (imm << 4) >> 4;
+    let imm = (word >> 20) as i16;
 
     match funct3 {
         0b000 => Ok(Instruction::Lb { rd, rs1, imm }),

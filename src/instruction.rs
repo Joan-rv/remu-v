@@ -11,6 +11,6 @@ pub enum Instruction {
     Lw { rd: u8, rs1: u8, imm: i16 },
     Lbu { rd: u8, rs1: u8, imm: i16 },
     Lhu { rd: u8, rs1: u8, imm: i16 },
-    Addi { rd: u8, rs1: u8, imm: u16 },
+    Addi { rd: u8, rs1: u8, imm: i16 },
     Add { rd: u8, rs1: u8, rs2: u8 },
 }

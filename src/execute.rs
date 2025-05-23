@@ -61,12 +61,12 @@ pub fn execute(instruction: Instruction, state: &mut State, memory: &mut Memory)
             let v = memory.lh(addr) as u32;
             state.set(rd, v);
         }
-        Instruction::Add { rd, rs1, rs2 } => {
-            let v = state.get(rs1).wrapping_add(state.get(rs2));
+        Instruction::Addi { rd, rs1, imm } => {
+            let v = state.get(rs1).wrapping_add_signed(imm as i32);
             state.set(rd, v);
         }
-        Instruction::Addi { rd, rs1, imm } => {
-            let v = state.get(rs1) + imm as u32;
+        Instruction::Add { rd, rs1, rs2 } => {
+            let v = state.get(rs1).wrapping_add(state.get(rs2));
             state.set(rd, v);
         }
     }
