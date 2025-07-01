@@ -5,7 +5,7 @@ OBJCOPY=$(PREFIX)objcopy
 
 .PHONY: all clean
 
-all: add.bin
+all: general.bin
 
 %.bin: %.o
 	$(OBJCOPY) -Obinary $^ $@
