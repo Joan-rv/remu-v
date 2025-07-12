@@ -30,6 +30,15 @@ fn decode_op(word: u32) -> Result<Instruction, DecodeError> {
 
     match funct {
         0b0000000000 => Ok(Instruction::Add { rd, rs1, rs2 }),
+        0b0100000000 => Ok(Instruction::Sub { rd, rs1, rs2 }),
+        0b0000000001 => Ok(Instruction::Sll { rd, rs1, rs2 }),
+        0b0000000010 => Ok(Instruction::Slt { rd, rs1, rs2 }),
+        0b0000000011 => Ok(Instruction::Sltu { rd, rs1, rs2 }),
+        0b0000000100 => Ok(Instruction::Xor { rd, rs1, rs2 }),
+        0b0000000101 => Ok(Instruction::Srl { rd, rs1, rs2 }),
+        0b0100000101 => Ok(Instruction::Sra { rd, rs1, rs2 }),
+        0b0000000110 => Ok(Instruction::Or { rd, rs1, rs2 }),
+        0b0000000111 => Ok(Instruction::And { rd, rs1, rs2 }),
         _ => Err(DecodeError),
     }
 }

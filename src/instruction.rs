@@ -13,4 +13,13 @@ pub enum Instruction {
     Lhu { rd: u8, rs1: u8, imm: i16 },
     Addi { rd: u8, rs1: u8, imm: i16 },
     Add { rd: u8, rs1: u8, rs2: u8 },
+    Sub { rd: u8, rs1: u8, rs2: u8 },
+    Sll { rd: u8, rs1: u8, rs2: u8 },
+    Slt { rd: u8, rs1: u8, rs2: u8 },
+    Sltu { rd: u8, rs1: u8, rs2: u8 },
+    Xor { rd: u8, rs1: u8, rs2: u8 },
+    Srl { rd: u8, rs1: u8, rs2: u8 },
+    Sra { rd: u8, rs1: u8, rs2: u8 },
+    Or { rd: u8, rs1: u8, rs2: u8 },
+    And { rd: u8, rs1: u8, rs2: u8 },
 }
