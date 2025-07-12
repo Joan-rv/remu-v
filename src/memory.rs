@@ -31,27 +31,34 @@ impl Memory {
 
     pub fn lb(&self, addr: u32) -> i8 {
         let addr = addr as usize;
-        debug_assert!(self.data.len() > addr);
         i8::from_le_bytes(self.data[addr..(addr + 1)].try_into().unwrap())
     }
     pub fn lh(&self, addr: u32) -> i16 {
         let addr = addr as usize;
-        debug_assert!(self.data.len() >= addr + 2);
         i16::from_le_bytes(self.data[addr..(addr + 2)].try_into().unwrap())
     }
     pub fn lw(&self, addr: u32) -> u32 {
         let addr = addr as usize;
-        debug_assert!(self.data.len() >= addr + 4);
         u32::from_le_bytes(self.data[addr..(addr + 4)].try_into().unwrap())
     }
     pub fn lbu(&self, addr: u32) -> u8 {
         let addr = addr as usize;
-        debug_assert!(self.data.len() > addr);
         u8::from_le_bytes(self.data[addr..(addr + 1)].try_into().unwrap())
     }
     pub fn lhu(&self, addr: u32) -> u16 {
         let addr = addr as usize;
-        debug_assert!(self.data.len() >= addr + 2);
         u16::from_le_bytes(self.data[addr..(addr + 2)].try_into().unwrap())
+    }
+    pub fn sb(&mut self, addr: u32, value: u8) {
+        let addr = addr as usize;
+        self.data[addr] = value;
+    }
+    pub fn sh(&mut self, addr: u32, value: u16) {
+        let addr = addr as usize;
+        self.data[addr..addr + 2].copy_from_slice(&value.to_le_bytes());
+    }
+    pub fn sw(&mut self, addr: u32, value: u32) {
+        let addr = addr as usize;
+        self.data[addr..addr + 4].copy_from_slice(&value.to_le_bytes());
     }
 }
