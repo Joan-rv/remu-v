@@ -56,19 +56,17 @@ fn decode_branch(word: u32) -> Result<Instruction, DecodeError> {
     let funct3 = (word >> 12) & 0x7;
 
     // instruction[31:25] -> imm[12|10:5]
-    let hi = (word >> 25) & 0x7f;
-    let bit12 = (hi & 0x40) << (12 - 6);
-    let bit10_5 = (hi & 0x3f) << (10 - 5);
+    let hi = word as i32 >> (32 - 13);
+    let bit12 = (hi >> 12) << 12; // set low bits to zero but keep sign extension bits
+    let bit10_5 = (hi >> 1) & 0x7e0;
 
     // instruction[11:7] -> imm[4:1|11]
-    let lo = (word >> 7) & 0x1f;
+    let lo = word as i32 >> 7;
     let bit4_1 = lo & 0x1e;
     let bit11 = (lo & 0x1) << 11;
 
-    // bit0 is 0
-    let u_imm = bit12 | bit11 | bit10_5 | bit4_1;
-    // sign extend
-    let imm = ((u_imm as i16) << 3) >> 3;
+    // bit0 is 0 implicity (jumps are 2 byte aligned)
+    let imm = (bit12 | bit11 | bit10_5 | bit4_1) as i16;
 
     // instruction[19:15]
     let rs1 = (word >> 15) as u8 & 0x1f;
