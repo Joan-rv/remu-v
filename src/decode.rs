@@ -52,10 +52,23 @@ fn decode_op_imm(word: u32) -> Result<Instruction, DecodeError> {
     // instruction[19:15]
     let rs1 = (word >> 15) as u8 & 0x1f;
     // instruction[31:20]
-    let imm = (word >> 20) as i16;
+    let imm = (word as i32 >> 20) as i16;
+    // instruction[24:20]
+    let shamt = imm as u8 & 0x1f;
 
-    match funct3 {
-        0b000 => Ok(Instruction::Addi { rd, rs1, imm }),
+    // instruction[31:25]
+    let funct7 = (word >> 25) & 0x7f;
+
+    match (funct3, funct7) {
+        (0b000, _) => Ok(Instruction::Addi { rd, rs1, imm }),
+        (0b010, _) => Ok(Instruction::Slti { rd, rs1, imm }),
+        (0b011, _) => Ok(Instruction::Sltiu { rd, rs1, imm }),
+        (0b100, _) => Ok(Instruction::Xori { rd, rs1, imm }),
+        (0b110, _) => Ok(Instruction::Ori { rd, rs1, imm }),
+        (0b111, _) => Ok(Instruction::Andi { rd, rs1, imm }),
+        (0b001, 0b0000000) => Ok(Instruction::Slli { rd, rs1, shamt }),
+        (0b101, 0b0000000) => Ok(Instruction::Srli { rd, rs1, shamt }),
+        (0b101, 0b0100000) => Ok(Instruction::Srai { rd, rs1, shamt }),
         _ => Err(DecodeError),
     }
 }

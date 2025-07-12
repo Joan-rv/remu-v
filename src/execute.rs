@@ -65,6 +65,38 @@ pub fn execute(instruction: Instruction, state: &mut State, memory: &mut Memory)
             let v = state.get(rs1).wrapping_add_signed(imm as i32);
             state.set(rd, v);
         }
+        Instruction::Slti { rd, rs1, imm } => {
+            let v = state.gets(rs1) < imm as i32;
+            state.set(rd, v as u32);
+        }
+        Instruction::Sltiu { rd, rs1, imm } => {
+            let v = state.get(rs1) < imm as u32;
+            state.set(rd, v as u32);
+        }
+        Instruction::Xori { rd, rs1, imm } => {
+            let v = state.get(rs1) ^ imm as u32;
+            state.set(rd, v);
+        }
+        Instruction::Ori { rd, rs1, imm } => {
+            let v = state.get(rs1) | imm as u32;
+            state.set(rd, v);
+        }
+        Instruction::Andi { rd, rs1, imm } => {
+            let v = state.get(rs1) & imm as u32;
+            state.set(rd, v);
+        }
+        Instruction::Slli { rd, rs1, shamt } => {
+            let v = state.get(rs1) << shamt;
+            state.set(rd, v);
+        }
+        Instruction::Srli { rd, rs1, shamt } => {
+            let v = state.get(rs1) >> shamt;
+            state.set(rd, v);
+        }
+        Instruction::Srai { rd, rs1, shamt } => {
+            let v = state.gets(rs1) >> shamt;
+            state.set(rd, v as u32);
+        }
         Instruction::Add { rd, rs1, rs2 } => {
             let v = state.get(rs1).wrapping_add(state.get(rs2));
             state.set(rd, v);
