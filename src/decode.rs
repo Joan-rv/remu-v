@@ -95,7 +95,7 @@ fn decode_load(word: u32) -> Result<Instruction, DecodeError> {
     // instruction[19:15]
     let rs1 = (word >> 15) as u8 & 0x1f;
     // instruction[31:20]
-    let imm = (word >> 20) as i16;
+    let imm = (word as i32 >> 20) as i16;
 
     match funct3 {
         0b000 => Ok(Instruction::Lb { rd, rs1, imm }),
