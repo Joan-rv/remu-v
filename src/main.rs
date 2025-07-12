@@ -1,6 +1,5 @@
 use clap::Parser;
 use remu_v::{decode, execute, memory::Memory, state::State};
-use std::error::Error;
 
 #[derive(Parser)]
 struct Args {
@@ -9,7 +8,7 @@ struct Args {
     program_path: String,
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
     let mut memory = Memory::new(args.memory_size);
