@@ -1,15 +1,19 @@
+use clap::Parser;
 use remu_v::{decode, execute, memory::Memory, state::State};
 use std::error::Error;
-use thiserror::Error;
+
+#[derive(Parser)]
+struct Args {
+    #[arg(short, long, default_value_t = 1024)]
+    memory_size: usize,
+    program_path: String,
+}
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let Some(path) = std::env::args().nth(1) else {
-        println!("Missing argument");
-        return Err(Box::new(ArgError));
-    };
+    let args = Args::parse();
 
-    let mut memory = Memory::new(1024);
-    memory.load_file(path, 0)?;
+    let mut memory = Memory::new(args.memory_size);
+    memory.load_file(args.program_path, 0)?;
 
     let mut state = State::default();
 
@@ -28,7 +32,3 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("End state: {:#x?}", state);
     Ok(())
 }
-
-#[derive(Error, Debug)]
-#[error("Missing arguments")]
-struct ArgError;
