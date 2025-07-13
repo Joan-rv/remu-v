@@ -37,4 +37,7 @@ pub enum Instruction {
     Sra { rd: u8, rs1: u8, rs2: u8 },
     Or { rd: u8, rs1: u8, rs2: u8 },
     And { rd: u8, rs1: u8, rs2: u8 },
+    Fence,
+    Ecall,
+    Ebreak,
 }

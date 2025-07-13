@@ -15,6 +15,8 @@ pub fn decode(word: u32) -> Result<Instruction, DecodeError> {
         0b0010111 => decode_auipc(word),
         0b1101111 => decode_jal(word),
         0b1100111 => decode_jalr(word),
+        0b0001111 => decode_fence(word),
+        0b1110011 => decode_system(word),
         _ => Err(DecodeError),
     }
 }
@@ -206,6 +208,18 @@ fn decode_jalr(word: u32) -> Result<Instruction, DecodeError> {
     let imm = (word as i32 >> 20) as i16;
 
     Ok(Instruction::Jalr { rd, rs1, imm })
+}
+
+fn decode_fence(_word: u32) -> Result<Instruction, DecodeError> {
+    // TODO: handle other fields. We can ignore them because we have no harts, we implement fence as nop
+    Ok(Instruction::Fence)
+}
+fn decode_system(word: u32) -> Result<Instruction, DecodeError> {
+    match word {
+        0b000000000000_00000_000_00000_1110011 => Ok(Instruction::Ecall),
+        0b000000000001_00000_000_00000_1110011 => Ok(Instruction::Ecall),
+        _ => Err(DecodeError),
+    }
 }
 
 #[derive(Error, Debug)]

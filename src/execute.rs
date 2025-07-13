@@ -1,3 +1,5 @@
+use std::intrinsics::breakpoint;
+
 use crate::instruction::Instruction;
 use crate::memory::Memory;
 use crate::state::State;
@@ -166,5 +168,8 @@ pub fn execute(instruction: Instruction, state: &mut State, memory: &mut Memory)
             let v = state.get(rs1) & state.get(rs2);
             state.set(rd, v);
         }
+        Instruction::Fence => {}
+        Instruction::Ecall => todo!(),
+        Instruction::Ebreak => todo!(), // maybe implement as nop or std::instrinsics::breakpoint
     }
 }
