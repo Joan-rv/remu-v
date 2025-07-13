@@ -4,6 +4,23 @@ use crate::state::State;
 
 pub fn execute(instruction: Instruction, state: &mut State, memory: &mut Memory) {
     match instruction {
+        Instruction::Lui { rd, imm } => {
+            state.set(rd, imm);
+        }
+        Instruction::Auipc { rd, imm } => {
+            let v = imm + state.pc;
+            state.set(rd, v);
+        }
+        Instruction::Jal { rd, imm } => {
+            state.set(rd, state.pc);
+            state.pc = state.pc.wrapping_add_signed(imm - 4);
+        }
+        Instruction::Jalr { rd, rs1, imm } => {
+            let mut offset = state.gets(rs1) + imm as i32 - 4;
+            offset &= !0b1i32;
+            state.set(rd, state.pc);
+            state.pc = state.pc.wrapping_add_signed(offset);
+        }
         Instruction::Beq { imm, rs1, rs2 } => {
             if state.get(rs1) == state.get(rs2) {
                 state.pc = state.pc.wrapping_add_signed(imm as i32 - 4);
