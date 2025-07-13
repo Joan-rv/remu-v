@@ -7,7 +7,7 @@ use std::{
 
 #[derive(Debug, Clone)]
 pub struct Memory {
-    data: Vec<u8>,
+    pub(crate) data: Vec<u8>,
 }
 
 impl Memory {
