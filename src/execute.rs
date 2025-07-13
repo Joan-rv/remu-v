@@ -172,7 +172,7 @@ pub fn execute(
             state.set(rd, v);
         }
         Instruction::Fence => {}
-        Instruction::Ecall => syscall(state)?,
+        Instruction::Ecall => syscall(state, memory)?,
         Instruction::Ebreak => todo!(), // maybe implement as nop or std::instrinsics::breakpoint
     };
     Ok(())
