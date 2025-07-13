@@ -21,10 +21,10 @@ pub fn execute(
             state.pc = state.pc.wrapping_add_signed(imm - 4);
         }
         Instruction::Jalr { rd, rs1, imm } => {
-            let mut offset = state.gets(rs1) + imm as i32 - 4;
-            offset &= !0b1i32;
+            let mut new_pc = state.gets(rs1) + imm as i32;
+            new_pc &= !0b1i32; // set last bit to 0
             state.set(rd, state.pc);
-            state.pc = state.pc.wrapping_add_signed(offset);
+            state.pc = new_pc as u32;
         }
         Instruction::Beq { imm, rs1, rs2 } => {
             if state.get(rs1) == state.get(rs2) {
