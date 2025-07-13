@@ -139,7 +139,7 @@ fn decode_store(word: u32) -> Result<Instruction, DecodeError> {
     let funct3 = (word >> 12) & 0x7;
 
     // instruction[11:5|4:0]
-    let hi = word as i32 >> 25 >> 7 << 7;
+    let hi = (word as i32 >> 25) >> 5 << 5; // clear lower 5 bits
     let lo = (word as i32 >> 7) & 0x1f;
     let imm = (hi | lo) as i16;
 
