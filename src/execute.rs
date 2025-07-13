@@ -1,10 +1,13 @@
-use std::intrinsics::breakpoint;
-
 use crate::instruction::Instruction;
 use crate::memory::Memory;
 use crate::state::State;
+use crate::syscall::syscall;
 
-pub fn execute(instruction: Instruction, state: &mut State, memory: &mut Memory) {
+pub fn execute(
+    instruction: Instruction,
+    state: &mut State,
+    memory: &mut Memory,
+) -> anyhow::Result<()> {
     match instruction {
         Instruction::Lui { rd, imm } => {
             state.set(rd, imm);
@@ -169,7 +172,8 @@ pub fn execute(instruction: Instruction, state: &mut State, memory: &mut Memory)
             state.set(rd, v);
         }
         Instruction::Fence => {}
-        Instruction::Ecall => todo!(),
+        Instruction::Ecall => syscall(state)?,
         Instruction::Ebreak => todo!(), // maybe implement as nop or std::instrinsics::breakpoint
-    }
+    };
+    Ok(())
 }

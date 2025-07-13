@@ -19,15 +19,7 @@ fn main() -> anyhow::Result<()> {
     loop {
         let word = memory.lw(state.pc);
         state.pc += 4;
-        let instruction = match decode(word) {
-            Ok(i) => i,
-            Err(e) => {
-                println!("Failed decoding: {}", e);
-                break;
-            }
-        };
-        execute(instruction, &mut state, &mut memory);
+        let instruction = decode(word)?;
+        execute(instruction, &mut state, &mut memory)?;
     }
-    println!("End state: {:#x?}", state);
-    Ok(())
 }

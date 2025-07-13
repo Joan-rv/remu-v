@@ -10,3 +10,7 @@ loop:
     lb t3, -1(t0)
     lhu t4, -1(t0)
     lbu t5, -1(t0)
+    li a0, 0
+    li a7, 93
+    ecall
+
