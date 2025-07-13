@@ -215,6 +215,7 @@ fn decode_fence(_word: u32) -> Result<Instruction, DecodeError> {
     Ok(Instruction::Fence)
 }
 fn decode_system(word: u32) -> Result<Instruction, DecodeError> {
+    #[allow(clippy::unusual_byte_groupings)] // group based on instruction format
     match word {
         0b000000000000_00000_000_00000_1110011 => Ok(Instruction::Ecall),
         0b000000000001_00000_000_00000_1110011 => Ok(Instruction::Ecall),
