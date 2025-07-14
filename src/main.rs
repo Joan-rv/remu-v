@@ -1,11 +1,12 @@
 use clap::Parser;
 use remu_v::{decode, execute, memory::Memory, state::State};
+use std::path::PathBuf;
 
 #[derive(Parser)]
 struct Args {
     #[arg(short, long, default_value_t = 1024)]
     memory_size: usize,
-    program_path: String,
+    program_path: PathBuf,
 }
 
 fn main() -> anyhow::Result<()> {
