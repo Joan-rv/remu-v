@@ -2,6 +2,7 @@ use crate::instruction::Instruction;
 use crate::memory::Memory;
 use crate::state::State;
 use crate::syscall::syscall;
+use std::sync::atomic::{Ordering, fence};
 
 pub fn execute(
     instruction: Instruction,
@@ -171,7 +172,7 @@ pub fn execute(
             let v = state.get(rs1) & state.get(rs2);
             state.set(rd, v);
         }
-        Instruction::Fence => {}
+        Instruction::Fence => fence(Ordering::SeqCst),
         Instruction::Ecall => syscall(state, memory)?,
         Instruction::Ebreak => todo!(), // maybe implement as nop or std::instrinsics::breakpoint
     };
